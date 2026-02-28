@@ -15,8 +15,7 @@ jobs:
 
       - name: Generate index.json
         run: |
-          cd servers
-          ls -d */ | sed 's/\///' | jq -R . | jq -s . > ../index.json
+          ls servers/ | jq -R . | jq -s . > index.json
 
       - name: Commit index.json
         run: |
