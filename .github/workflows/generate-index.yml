@@ -2,7 +2,7 @@ name: Generate Server Index
 
 on:
   push:
-    branches: [ster]
+    branches: [master]
     paths:
       - "servers/**"
 
