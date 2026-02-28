@@ -1,0 +1,29 @@
+name: Generate Server Index
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'servers/**'
+
+jobs:
+  generate-index:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate index.json
+        run: |
+          cd servers
+          ls -d */ | sed 's/\///' | jq -R . | jq -s . > ../index.json
+
+      - name: Commit index.json
+        run: |
+          git config user.email "bot@pixelclient.net"
+          git config user.name "PixelClient Bot"
+          git add index.json
+          git diff --staged --quiet || git commit -m "chore: update index.json"
+          git push
