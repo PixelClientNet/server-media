@@ -13,9 +13,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Generate index.json
+      - name: Debug & Generate index.json
         run: |
+          echo "=== Root ==="
+          ls -la
+          echo "=== Servers ==="
+          ls -la servers/
+          echo "=== Generating ==="
           ls -d servers/*/ | xargs -I{} basename {} | jq -R . | jq -s . > index.json
+          echo "=== Result ==="
+          cat index.json
 
       - name: Commit index.json
         run: |
