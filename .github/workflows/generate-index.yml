@@ -1,28 +1,11 @@
-name: Generate Server Index
+- uses: actions/checkout@v4
+  with:
+    token: ${{ secrets.BOT_TOKEN }}
 
-on:
-  push:
-    branches: [master]
-
-jobs:
-  generate-index:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Generate index.json
-        run: |
-          ls -d servers/*/ | xargs -I{} basename {} | jq -R . | jq -s . > index.json
-
-      - name: Commit index.json
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "chore: update index.json"
-          file_pattern: index.json
-          skip_dirty_check: false
-          push_options: "--force"
+- name: Commit index.json
+  run: |
+    git config user.email "bot@pixelclient.net"
+    git config user.name "PixelClient Bot"
+    git add index.json
+    git diff --staged --quiet || git commit -m "chore: update index.json"
+    git push
