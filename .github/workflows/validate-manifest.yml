@@ -1,0 +1,37 @@
+name: Validate Server Manifest
+
+on:
+  pull_request:
+    paths:
+      - "servers/**/manifest.json"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate manifests
+        run: |
+          FAILED=0
+          for f in servers/*/manifest.json; do
+            echo "Checking $f..."
+            if ! jq -e '.name and .address and .background and .icon' "$f" > /dev/null 2>&1; then
+              echo "❌ FEHLER in $f: Pflichtfelder fehlen (name, address, background, icon)"
+              FAILED=1
+            else
+              NAME=$(jq -r '.name' "$f")
+              ADDRESS=$(jq -r '.address' "$f")
+              echo "✅ $NAME ($ADDRESS) ist valid"
+            fi
+          done
+
+          if [ $FAILED -eq 1 ]; then
+            echo ""
+            echo "❌ Validierung fehlgeschlagen — bitte manifest.json prüfen"
+            exit 1
+          fi
+
+          echo ""
+          echo "✅ Alle manifests sind valid!"
