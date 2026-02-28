@@ -3,8 +3,6 @@ name: Generate Server Index
 on:
   push:
     branches: [master]
-    paths:
-      - "servers/**"
 
 jobs:
   generate-index:
