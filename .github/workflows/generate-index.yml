@@ -2,9 +2,9 @@ name: Generate Server Index
 
 on:
   push:
-    branches: [main]
+    branches: [ster]
     paths:
-      - 'servers/**'
+      - "servers/**"
 
 jobs:
   generate-index:
