@@ -15,7 +15,7 @@ jobs:
 
       - name: Generate index.json
         run: |
-          ls servers/ | jq -R . | jq -s . > index.json
+          ls -d servers/*/ | xargs -I{} basename {} | jq -R . | jq -s . > index.json
 
       - name: Commit index.json
         run: |
